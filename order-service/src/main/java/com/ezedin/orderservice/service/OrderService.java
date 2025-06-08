@@ -4,6 +4,7 @@ import com.ezedin.orderservice.dto.InventoryResponse;
 import com.ezedin.orderservice.dto.OrderLineItemsDto;
 import com.ezedin.orderservice.dto.OrderRequest;
 import com.ezedin.orderservice.event.OrderPlacedEvent;
+import com.ezedin.orderservice.event.OrderPlacedMessage;
 import com.ezedin.orderservice.model.Order;
 import com.ezedin.orderservice.model.OrderLineItems;
 import com.ezedin.orderservice.repository.OrderRepository;
@@ -11,6 +12,8 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ public class OrderService {
     private final WebClient.Builder webClientBuilder;
     private final ObservationRegistry observationRegistry;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final RabbitTemplate rabbitTemplate;
 
     public String placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
@@ -62,8 +66,11 @@ public class OrderService {
 
             if (allProductsInStock) {
                 orderRepository.save(order);
+                rabbitTemplate.convertAndSend("userQueue",new OrderPlacedMessage(order.getOrderNumber()));
+
+                log.info("sending Notification for order : {}", order.getOrderNumber());
                 // publish Order Placed Event
-                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order.getOrderNumber()));
+               applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order.getOrderNumber()));
                 return "Order Placed";
             } else {
                 throw new IllegalArgumentException("Product is not in stock, please try again later");

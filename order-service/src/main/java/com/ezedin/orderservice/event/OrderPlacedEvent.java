@@ -20,3 +20,4 @@ public class OrderPlacedEvent extends ApplicationEvent {
         this.orderNumber = orderNumber;
     }
 }
+
