@@ -1,0 +1,15 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: new-spring-cloud-client
+            client-secret: fkM6zEbaQxNHnSZgXDR5jnBHAAo9LE5c
+            provider: keycloak
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://keycloak:8181/login/oauth2/code/keycloak"
+            scope: openid, profile, email
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8181/realms/spring-boot-microservice-realm

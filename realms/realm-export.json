@@ -1,0 +1,19 @@
+{
+  "realm": "spring-boot-microservice-realm",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "spring-cloud-client",
+      "secret": "E4302hUJV66Acl6r1G4C2UK29yV1CwXC",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [],
+      "defaultClientScopes": ["profile", "email"],
+      "optionalClientScopes": []
+    }
+  ]
+}

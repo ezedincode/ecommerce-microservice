@@ -1,20 +1,24 @@
 spring:
   cloud:
     gateway:
-        routes:
-          - id: product-service
-            uri: lb://product-service
-            predicates:
-              - Path=/api/product/**
-          - id: inventory-service
-            uri: lb://inventory-service
-            predicates:
-              - Path=/api/inventory/**
-          - id: order-service
-            uri: lb://order-service
-            predicates:
-              - Path=/api/order/**
-          - id: discovery-server
-            uri: http://localhost:8761
-            predicates:
-                - Path=/**
+      discovery:
+        locator:
+          enabled: true  # Automatically create routes from Eureka
+      routes:            # Optional: only needed if you want to customize paths
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/product/**
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/inventory/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/order/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka
