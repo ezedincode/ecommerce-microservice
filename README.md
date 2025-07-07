@@ -94,5 +94,5 @@ docker-compose down -v
 
 Feel free to open issues or pull requests to improve this project.
 
-Let me know your actual email if you want to replace `ezedinahmed2021@example.com`. I’ll help update it again or export the README file for you.
+you can contact me  `ezedinahmed2021@example.com`. 
 
